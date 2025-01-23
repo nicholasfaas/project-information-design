@@ -149,10 +149,10 @@ const App: React.FC = () => {
           overflow: "auto"
         }}
       >
-        <h2>Select your garden conditions</h2>
+        <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", fontSize: "2em", fontWeight: "700" }}>Select your garden conditions</h2>
  
         {/* Garden Area */}
-        <h3 style={{ display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
+        <h3 style={{ fontFamily: "'Hind Madurai', sans-serif", display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
           <Grid size={20} color="#00A264" /> Garden Area (m²)
         </h3>
         <div
@@ -173,6 +173,7 @@ const App: React.FC = () => {
           >
             <label
               style={{
+                fontFamily: "'Hind Madurai', sans-serif", 
                 color: "#1E4D3B",
                 flex: ".5",
               }}
@@ -207,6 +208,7 @@ const App: React.FC = () => {
           >
             <label
               style={{
+                fontFamily: "'Hind Madurai', sans-serif", 
                 color: "#1E4D3B",
                 flex: ".5",
               }}
@@ -287,10 +289,10 @@ const App: React.FC = () => {
         ></div>
  
         {/* Choose Your Plant */}
-        <h2>Customize your garden</h2>
+        <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", fontSize: "2em" }}>Customize your garden</h2>
 
         {/* Color Filter */}
-        <h3 style={{ display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
+        <h3 style={{ fontFamily: "'Hind Madurai', sans-serif", display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
           <PaintBucket size={20} color="#00A264" /> Color
         </h3>
         <div
@@ -326,7 +328,7 @@ const App: React.FC = () => {
           }}
         ></div>
 
-        <h3 style={{ display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
+        <h3 style={{ fontFamily: "'Hind Madurai', sans-serif", display: "flex", alignItems: "center", gap: "0.5em", color: "#00A264", marginBottom: "8px" }}>
           <Sprout size={20} color="#00A264" /> Plants
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1em" }}>
@@ -368,6 +370,7 @@ const App: React.FC = () => {
               />
               <div
                 style={{
+                  fontFamily: "'Hind Madurai', sans-serif", 
                   position: "absolute",
                   left: "0.5em",
                   bottom: "0.5em",
@@ -445,7 +448,7 @@ const App: React.FC = () => {
           zIndex: "1",
         }}
       >
-        <h2>Results</h2>
+        <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", fontSize: "2em" }}>Results</h2>
         {Object.entries(plantSummary).length > 0 ? (
           <>
             {Object.entries(plantSummary).map(([plantName, data]) => (
@@ -462,7 +465,7 @@ const App: React.FC = () => {
                 }}
               >
                 <div style={{ flex: 1, textAlign: "left" }}>
-                  <p style={{ margin: "0 0 .5em 0", fontSize: "12px" }}>Color</p>
+                  <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0 0 .5em 0", fontSize: "12px" }}>Color</p>
                   <span
                     style={{
                       width: "2em",
@@ -474,12 +477,12 @@ const App: React.FC = () => {
                   ></span>
                 </div>
                 <div style={{ flex: 1, textAlign: "left" }}>
-                  <p style={{ margin: "0", fontSize: "12px" }}>Plants</p>
-                  <h2 style={{ margin: "0" }}>{data.count}</h2>
+                  <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0", fontSize: "12px" }}>Plants</p>
+                  <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0" }}>{data.count}</h2>
                 </div>
                 <div style={{ flex: 1, textAlign: "left" }}>
-                  <p style={{ margin: "0", fontSize: "12px" }}>Grams of fabric</p>
-                  <h2 style={{ margin: "0" }}>{data.totalGrams.toLocaleString()} g</h2>
+                  <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0", fontSize: "12px" }}>Grams of fabric</p>
+                  <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0" }}>{data.totalGrams.toLocaleString()} g</h2>
                 </div>
               </div>
             ))}
@@ -496,21 +499,21 @@ const App: React.FC = () => {
               }}
             >
               <div style={{ flex: 1, textAlign: "left" }}>
-                <p style={{ margin: "0", fontSize: "12px" }}>Total colors</p>
-                <h2 style={{ margin: "0" }}>{new Set(Object.values(plantSummary).map(item => item.color)).size}</h2>
+                <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0", fontSize: "12px" }}>Total colors</p>
+                <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0" }}>{new Set(Object.values(plantSummary).map(item => item.color)).size}</h2>
               </div>
               <div style={{ flex: 1, textAlign: "left" }}>
-                <p style={{ margin: "0", fontSize: "12px" }}>Total plants</p>
-                <h2 style={{ margin: "0" }}>{totalPlants}</h2>
+                <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0", fontSize: "12px" }}>Total plants</p>
+                <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0" }}>{totalPlants}</h2>
               </div>
               <div style={{ flex: 1, textAlign: "left" }}>
-                <p style={{ margin: "0", fontSize: "12px" }}>Total grams of fabric</p>
-                <h2 style={{ margin: "0" }}>{totalGrams.toLocaleString()} g</h2>
+                <p style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0", fontSize: "12px" }}>Total grams of fabric</p>
+                <h2 style={{ fontFamily: "'Hind Madurai', sans-serif", margin: "0" }}>{totalGrams.toLocaleString()} g</h2>
               </div>
             </div>
           </>
         ) : (
-          <p>Place plants on your garden to see results.</p>
+          <p style={{ fontFamily: "'Hind Madurai', sans-serif" }}>Place plants on your garden to see results.</p>
         )}
         <div
           style={{
@@ -525,6 +528,7 @@ const App: React.FC = () => {
             href="/handleiding.pdf"
             download="handleiding.pdf"
             style={{
+              fontFamily: "'Hind Madurai', sans-serif", 
               display: "inline-block",
               width: "100%",
               padding: "12px 0",
