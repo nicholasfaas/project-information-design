@@ -62,20 +62,28 @@ Volg de onderstaande stappen om de applicatie lokaal op te zetten:
 ## Projectstructuur
 
 ```bash
-src/
+public/
 ├── assets/
-│   ├── background.png
 │   ├── dyersrocket.png
 │   ├── coreopsis.png
 │   ├── madder.png
 │   ├── phytolacca.png
 │   └── plants.json
-├── components/
-│   ├── Block.tsx
-│   ├── PlantModel.tsx
+├── models/
+│   ├── coreopsis.glb
+│   ├── dyers.glb
+│   ├── madder.glb
+│   └── phytolacca.glb
+└── handleiding.pdf
+src/
+├── assets/
+│   └── plants.json
+├── App.css
 ├── App.tsx
-├── index.tsx
-└── styles.css
+├── Block.tsx
+├── index.css
+├── main.tsx
+└── PlantModel.css
 ```
 
 ## Data Bewerking
