@@ -1,0 +1,43 @@
+[
+    {
+      "name": "Dyer's rocket",
+      "color": "#FFE908",
+      "sunlight": "Full Sun",
+      "image": "./assets/dyersrocket.png",
+      "plantsPerBlock": 16,
+      "gramsPerPlant": 250,
+      "bloomTime": "3 months",
+      "modelPath": "/models/dyers.glb"
+    },
+    {
+      "name": "Coreopsis",
+      "color": "#FF7F51",
+      "sunlight": "Full Sun",
+      "image": "./assets/coreopsis.png",
+      "plantsPerBlock": 9,
+      "gramsPerPlant": 28,
+      "bloomTime": "2 months",
+      "modelPath": "/models/coreopsis.glb"
+    },
+    {
+      "name": "Madder",
+      "color": "red",
+      "sunlight": "Partial Sun",
+      "image": "./assets/madder.png",
+      "plantsPerBlock": 9,
+      "gramsPerPlant": 160,
+      "bloomTime": "12 months",
+      "modelPath": "/models/madder.glb"
+    },
+    {
+      "name": "Phytolacca",
+      "color": "#5463A1",
+      "sunlight": "Partial Sun",
+      "image": "./assets/phytolacca.png",
+      "plantsPerBlock": 4,
+      "gramsPerPlant": 75,
+      "bloomTime": "6 months",
+      "modelPath": "/models/phytolacca.glb"
+    }
+  ]
+  

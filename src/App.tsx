@@ -1,64 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Block from "./Block";
-import Dyers from './assets/dyersrocket.png';
-import Coreopsis from './assets/coreopsis.png';
-import Madder from './assets/madder.png';
-import Phytolacca from './assets/phytolacca.png';
 import Background from './assets/background.png';
 import { Grid, PaintBucket, CloudSun, Sprout, Timer } from "lucide-react";
- 
+
 const App: React.FC = () => {
   const [width, setWidth] = useState<number>(2);
   const [height, setHeight] = useState<number>(2);
   const [colors, setColors] = useState<string[]>([]);
-  const [sunlight, setSunlight] = useState<number | null>(null);
   const sunlightOptions = ["Shadow", "Both", "Partial Sun", "Full Sun"];
+  const [selectedSunlight, setSelectedSunlight] = useState<number[]>([]);
   const [selectedBlocks, setSelectedBlocks] = useState<{ [key: string]: string }>({});
-  const [plant , setPlant] = useState<string | null>(null);
-  const plantsData = [
-    {
-      name: "Dyer's rocket",
-      color: "#FFE908",
-      sunlight: "Full Sun",
-      image: Dyers,
-      plantsPerBlock: 16,
-      gramsPerPlant: 250,
-      bloomTime: "3 months"
-    },
-    {
-      name: "Coreopsis",
-      color: "#FF7F51",
-      sunlight: "Full Sun",
-      image: Coreopsis,
-      plantsPerBlock: 9,
-      gramsPerPlant: 28,
-      bloomTime: "2 months"
-    },
-    {
-      name: "Madder",
-      color: "red",
-      sunlight: "Partial Sun",
-      image: Madder,
-      plantsPerBlock: 9,
-      gramsPerPlant: 160,
-      bloomTime: "12 months"
-    },
-    {
-      name: "Phytolacca",
-      color: "#5463A1",
-      sunlight: "Partial Sun",
-      image: Phytolacca,
-      plantsPerBlock: 4,
-      gramsPerPlant: 75,
-      bloomTime: "6 months"
-    },
-  ];  
- 
+  const [plant, setPlant] = useState<string | null>(null);
+  const [plants, setPlants] = useState<any[]>([]);
   const [tempWidth, setTempWidth] = useState<string>(width.toString());
   const [tempHeight, setTempHeight] = useState<string>(height.toString());
-  
+
+  useEffect(() => {
+    fetch("/assets/plants.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch plant data");
+        }
+        return response.json(); 
+      })
+      .then((data) => {
+        setPlants(data);
+      })
+      .catch((error) => {
+        console.error("Error loading plant data:", error);
+      });
+  }, []);
+
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTempWidth(value);
@@ -66,7 +40,7 @@ const App: React.FC = () => {
       setWidth(Math.max(1, parseInt(value, 10) || 1));
     }
   };
-  
+
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTempHeight(value);
@@ -74,20 +48,27 @@ const App: React.FC = () => {
       setHeight(Math.max(1, parseInt(value, 10) || 1));
     }
   };
-  
+
   const handleBlurWidth = () => {
     if (tempWidth === "") {
       setTempWidth(width.toString());
     }
   };
-  
+
   const handleBlurHeight = () => {
     if (tempHeight === "") {
       setTempHeight(height.toString());
     }
   };
-  
- 
+
+  const handleSunlightSelection = (index: number) => {
+    setSelectedSunlight((prev) =>
+      prev.includes(index) 
+        ? prev.filter((item) => item !== index)  // Verwijder de geselecteerde optie
+        : [...prev, index]  // Voeg toe aan de geselecteerde opties
+    );
+  };  
+
   const handleColorSelection = (selectedColor: string) => {
     setColors((prevColors) =>
       prevColors.includes(selectedColor)
@@ -95,10 +76,10 @@ const App: React.FC = () => {
         : [...prevColors, selectedColor]
     );
   };
- 
+
   const handlePlantSelection = (selectedPlant: string) => {
     setPlant((prevPlant) => (prevPlant === selectedPlant ? null : selectedPlant));
-  };  
+  };
 
   const handleBlockClick = (position: [number, number, number]) => {
     if (plant) {
@@ -107,19 +88,19 @@ const App: React.FC = () => {
         [position.join(",")]: plant,
       }));
     }
-  };  
- 
-  const filteredPlants = plantsData.filter(
+  };
+
+  const filteredPlants = plants.filter(
     (plant) =>
       (colors.length === 0 || colors.includes(plant.color)) &&
-      (sunlight === null || sunlightOptions[sunlight] === plant.sunlight)
+      (selectedSunlight.length === 0 || selectedSunlight.some((index) => sunlightOptions[index] === plant.sunlight))
   );  
 
   const calculatePlantSummary = () => {
     const summary: { [key: string]: { count: number; totalGrams: number; color: string } } = {};
   
     Object.values(selectedBlocks).forEach((plantName) => {
-      const plantInfo = plantsData.find((p) => p.name === plantName);
+      const plantInfo = plants.find((p) => p.name === plantName);
       if (plantInfo) {
         if (!summary[plantName]) {
           summary[plantName] = {
@@ -135,7 +116,11 @@ const App: React.FC = () => {
   
     return summary;
   };
- 
+
+  const plantSummary = calculatePlantSummary();
+  const totalPlants = Object.values(plantSummary).reduce((sum, item) => sum + item.count, 0);
+  const totalGrams = Object.values(plantSummary).reduce((sum, item) => sum + item.totalGrams, 0);
+
  
   return (
     <div
@@ -266,18 +251,19 @@ const App: React.FC = () => {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: "0.5em"
-          }}>
+          }}
+        >
           {sunlightOptions.map((option, index) => (
             <button
               key={option}
-              onClick={() => setSunlight((prev) => (prev === index ? null : index))}
+              onClick={() => handleSunlightSelection(index)}
               style={{
                 flex: 1,
                 padding: "0.5em",
                 border: "1px solid #1E4D3B",
                 borderRadius: "4px",
-                backgroundColor: sunlight === index ? "#1E4D3B" : "#fff", // Geselecteerde optie markeren
-                color: sunlight === index ? "#fff" : "#1E4D3B",
+                backgroundColor: selectedSunlight.includes(index) ? "#1E4D3B" : "#fff",
+                color: selectedSunlight.includes(index) ? "#fff" : "#1E4D3B",
                 fontSize: "1em",
                 fontWeight: "normal",
                 cursor: "pointer",
@@ -344,66 +330,66 @@ const App: React.FC = () => {
           <Sprout size={20} color="#00A264" /> Plants
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1em" }}>
-          {plantsData.map((plantItem) => {
-            const isSelected = plant === plantItem.name;
-            return (
-              <div
-                key={plantItem.name}
-                onClick={() => handlePlantSelection(plantItem.name)}
+        {plants.map(({ name, image, bloomTime }) => {
+          const isSelected = plant === name;
+          return (
+            <div
+              key={name}
+              onClick={() => handlePlantSelection(name)}
+              style={{
+                display: filteredPlants.some((filteredPlant) => filteredPlant.name === name) ? "block" : "none",
+                position: "relative",
+                width: "100%",
+                height: "12em",
+                borderRadius: "6px",
+                overflow: "hidden",
+                outline: isSelected ? "4px solid #00A264" : "none",
+                cursor: "pointer",
+              }}
+            >
+              <img
+                src={image}
+                alt={name}
                 style={{
-                  display: filteredPlants.includes(plantItem) ? "block" : "none",
-                  position: "relative",
                   width: "100%",
-                  height: "12em",
-                  borderRadius: "6px",
-                  overflow: "hidden",
-                  outline: isSelected ? "4px solid #00A264" : "none",
-                  cursor: "pointer",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "100%",
+                  background: "linear-gradient(rgba(0, 0, 0, 0) 50%,rgb(0, 0, 0) 100%)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: "0.5em",
+                  bottom: "0.5em",
+                  color: "#fff",
+                  fontSize: "1em",
                 }}
               >
-                <img
-                  src={plantItem.image}
-                  alt={plantItem.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
+                {name}
                 <div
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "100%",
-                    background: "linear-gradient(rgba(0, 0, 0, 0) 50%,rgb(0, 0, 0) 100%)",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    left: "0.5em",
-                    bottom: "0.5em",
-                    color: "#fff",
-                    fontSize: "1em",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
                   }}
                 >
-                  {plantItem.name}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Timer size={16} color="#fff" />
-                    <span style={{ fontSize: "1em", fontWeight: "lighter" }}>{plantItem.bloomTime}</span>
-                  </div>
+                  <Timer size={16} color="#fff" />
+                  <span style={{ fontSize: "1em", fontWeight: "lighter" }}>{bloomTime}</span>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
         </div>
       </div>
  
@@ -437,6 +423,7 @@ const App: React.FC = () => {
                 position={[colIndex, 0, rowIndex]}
                 selectedPlant={selectedBlocks[`${colIndex},0,${rowIndex}`] || null}
                 onBlockClick={handleBlockClick}
+                plantsData={plants}
               />
             ))
           )}
@@ -459,51 +446,72 @@ const App: React.FC = () => {
         }}
       >
         <h2>Results</h2>
-        {Object.entries(calculatePlantSummary()).length > 0 ? (
-          Object.entries(calculatePlantSummary()).map(([plantName, data]) => (
+        {Object.entries(plantSummary).length > 0 ? (
+          <>
+            {Object.entries(plantSummary).map(([plantName, data]) => (
+              <div
+                key={plantName}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  textAlign: "left",
+                  padding: "1em",
+                  backgroundColor: "rgba(30, 77, 59, 0.1)",
+                  borderRadius: "8px",
+                  marginBottom: "1em",
+                }}
+              >
+                <div style={{ flex: 1, textAlign: "left" }}>
+                  <p style={{ margin: "0 0 .5em 0", fontSize: "12px" }}>Color</p>
+                  <span
+                    style={{
+                      width: "2em",
+                      height: "2em",
+                      borderRadius: "4px",
+                      backgroundColor: data.color,
+                      display: "inline-block",
+                    }}
+                  ></span>
+                </div>
+                <div style={{ flex: 1, textAlign: "left" }}>
+                  <p style={{ margin: "0", fontSize: "12px" }}>Plants</p>
+                  <h2 style={{ margin: "0" }}>{data.count}</h2>
+                </div>
+                <div style={{ flex: 1, textAlign: "left" }}>
+                  <p style={{ margin: "0", fontSize: "12px" }}>Grams of fabric</p>
+                  <h2 style={{ margin: "0" }}>{data.totalGrams.toLocaleString()} g</h2>
+                </div>
+              </div>
+            ))}
+
+            {/* Totaal aantal planten en grams */}
             <div
-              key={plantName}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 textAlign: "left",
                 padding: "1em",
-                backgroundColor: "rgba(30, 77, 59, 0.1)",
-                borderRadius: "8px",
-                marginBottom: "1em",
+                marginTop: "1em",
+                borderTop: "1px solid #1E4D3B",
               }}
             >
-              {/* Div 1: Plant kleur */}
-              <div>
-                <p style={{ margin: "0 0 .5em 0", fontSize: "12px" }}>Color</p>
-                <span
-                  style={{
-                    width: "2em",
-                    height: "2em",
-                    borderRadius: "4px",
-                    backgroundColor: data.color,
-                    display: "inline-block",
-                  }}
-                ></span>
+              <div style={{ flex: 1, textAlign: "left" }}>
+                <p style={{ margin: "0", fontSize: "12px" }}>Total colors</p>
+                <h2 style={{ margin: "0" }}>{new Set(Object.values(plantSummary).map(item => item.color)).size}</h2>
               </div>
-
-              {/* Div 2: Aantal planten */}
-              <div>
-                <p style={{ margin: "0", fontSize: "12px" }}>Total Plants</p>
-                <h2 style={{ margin: "0" }}>{data.count}</h2>
+              <div style={{ flex: 1, textAlign: "left" }}>
+                <p style={{ margin: "0", fontSize: "12px" }}>Total plants</p>
+                <h2 style={{ margin: "0" }}>{totalPlants}</h2>
               </div>
-
-              {/* Div 3: Totaal gewicht */}
-              <div>
-                <p style={{ margin: "0", fontSize: "12px" }}>Total Grams</p>
-                <h2 style={{ margin: "0" }}>{data.totalGrams.toLocaleString()} g</h2>
+              <div style={{ flex: 1, textAlign: "left" }}>
+                <p style={{ margin: "0", fontSize: "12px" }}>Total grams of fabric</p>
+                <h2 style={{ margin: "0" }}>{totalGrams.toLocaleString()} g</h2>
               </div>
             </div>
-          ))
+          </>
         ) : (
-          <p>Select blocks to see plant details.</p>
+          <p>Place plants on your garden to see results.</p>
         )}
-
         <div
           style={{
             position: "absolute",

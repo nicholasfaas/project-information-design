@@ -6,15 +6,13 @@ interface BlockProps {
   position: [number, number, number];
   selectedPlant: string | null;
   onBlockClick: (position: [number, number, number]) => void;
+  plantsData: Array<{ name: string; modelPath: string }>;
 }
 
-const Block: React.FC<BlockProps> = ({ position, selectedPlant, onBlockClick  }) => {
-  const plantModels: Record<string, string> = {
-    "Dyer's rocket": "/models/dyers.glb",
-    Coreopsis: "/models/coreopsis.glb",
-    Madder: "/models/madder.glb",
-    Phytolacca: "/models/phytolacca.glb",
-  };
+const Block: React.FC<BlockProps> = ({ position, selectedPlant, onBlockClick, plantsData }) => {
+  const plantModels: Record<string, string> = Object.fromEntries(
+    plantsData.map((plant) => [plant.name, plant.modelPath])
+  );
 
   return (
     <group position={position}>
