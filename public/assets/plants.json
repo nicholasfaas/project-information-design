@@ -36,12 +36,12 @@
     "specificColors": ["#cd6303", "#6a3607"]
   },
   {
-    "name": "Dyer's chamomile",
+    "name": "Dyer's Chamomile",
     "sunlight": ["Full Sun"],
     "colors": ["Yellow"],
     "image": "./assets/dyers-chamomile.jpg",
     "plantsPerBlock": 9,
-    "modelPath": "/models/chamomile_50cm.glb",
+    "modelPath": "/models/chamomille_50cm.glb",
     "specificColors": ["#ffd966", "#565c5a"]
   },
   {
@@ -113,7 +113,7 @@
     "colors": ["Yellow", "Green", "Grey", "Black"],
     "image": "./assets/st-johns-wort.png",
     "plantsPerBlock": 6,
-    "modelPath": "/models/stjohnswort_90cm.glb",
+    "modelPath": "/models/stjohnswort_70cm.glb",
     "specificColors": ["#adc742", "#4c4f3a"]
   },
   {
