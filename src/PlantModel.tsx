@@ -7,7 +7,7 @@ interface PlantModelProps {
   scale?: [number, number, number];
 }
 
-const PlantModel: React.FC<PlantModelProps> = ({ modelPath, position, scale = [0.15, 0.15, 0.15] }) => {
+const PlantModel: React.FC<PlantModelProps> = ({ modelPath, position, scale = [0.5, 0.5, 0.5] }) => {
   const { scene } = useGLTF(modelPath);
 
   return <primitive object={scene.clone()} position={position} scale={scale} />;

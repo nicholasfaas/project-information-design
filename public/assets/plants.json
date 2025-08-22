@@ -1,43 +1,155 @@
 [
-    {
-      "name": "Dyer's rocket",
-      "color": "#FFE908",
-      "sunlight": "Full Sun",
-      "image": "./assets/dyersrocket.png",
-      "plantsPerBlock": 16,
-      "gramsPerPlant": 250,
-      "bloomTime": "3 months",
-      "modelPath": "/models/dyers.glb"
-    },
-    {
-      "name": "Coreopsis",
-      "color": "#FF7F51",
-      "sunlight": "Full Sun",
-      "image": "./assets/coreopsis.png",
-      "plantsPerBlock": 9,
-      "gramsPerPlant": 28,
-      "bloomTime": "2 months",
-      "modelPath": "/models/coreopsis.glb"
-    },
-    {
-      "name": "Madder",
-      "color": "red",
-      "sunlight": "Partial Sun",
-      "image": "./assets/madder.png",
-      "plantsPerBlock": 9,
-      "gramsPerPlant": 160,
-      "bloomTime": "12 months",
-      "modelPath": "/models/madder.glb"
-    },
-    {
-      "name": "Phytolacca",
-      "color": "#5463A1",
-      "sunlight": "Partial Sun",
-      "image": "./assets/phytolacca.png",
-      "plantsPerBlock": 4,
-      "gramsPerPlant": 75,
-      "bloomTime": "6 months",
-      "modelPath": "/models/phytolacca.glb"
-    }
-  ]
-  
+  {
+    "name": "Coreopsis",
+    "sunlight": ["Full Sun"],
+    "colors": ["Yellow", "Orange", "Red"],
+    "image": "./assets/coreopsis.png",
+    "plantsPerBlock": 20,
+    "modelPath": "/models/coreopsis_50cm.glb",
+    "specificColors": ["#d7a70a", "#cd6303", "#f54706", "#000000"]
+  },
+  {
+    "name": "Cosmos (pink)",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Orange", "Red", "Brown", "Black"],
+    "image": "./assets/cosmos-bipinnatus.jpg",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/cosmos_pink_70cm.glb",
+    "specificColors": ["#cd6303", "#6a3607"]
+  },
+  {
+    "name": "Cosmos (orange)",
+    "sunlight": ["Full Sun"],
+    "colors": ["Yellow", "Orange"],
+    "image": "./assets/cosmos-sulfur.png",
+    "plantsPerBlock": 9,
+    "modelPath": "/models/cosmos_orange_50cm.glb",
+    "specificColors": ["#ff9900", "#6a3607"]
+  },
+  {
+    "name": "Cosmos (red)",
+    "sunlight": ["Full Sun"],
+    "colors": ["Brown", "Black"],
+    "image": "./assets/cosmos-chocolate.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/cosmos_red(chocolate)_70cm.glb",
+    "specificColors": ["#cd6303", "#6a3607"]
+  },
+  {
+    "name": "Dyer's chamomile",
+    "sunlight": ["Full Sun"],
+    "colors": ["Yellow"],
+    "image": "./assets/dyers-chamomile.jpg",
+    "plantsPerBlock": 9,
+    "modelPath": "/models/chamomile_50cm.glb",
+    "specificColors": ["#ffd966", "#565c5a"]
+  },
+  {
+    "name": "Goldenrod",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Yellow", "Green", "Grey"],
+    "image": "./assets/solidago.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/goldenrod_120cm.glb",
+    "specificColors": ["#d3ab07"]
+  },
+  {
+    "name": "Hollyhock",
+    "sunlight": ["Full Sun"],
+    "colors": ["Purple", "Blue", "Green", "Grey"],
+    "image": "./assets/hollyhock.png",
+    "plantsPerBlock": 2,
+    "modelPath": "/models/hollyhock_180cm.glb",
+    "specificColors": ["#674ea7", "#225161", "#8bad8c"]
+  },
+  {
+    "name": "Japanese Indigo",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Pink", "Purple", "Blue", "Grey"],
+    "image": "./assets/indigo-japanese.png",
+    "plantsPerBlock": 12,
+    "modelPath": "/models/japanese_indigo_70cm.glb",
+    "specificColors": ["#d4ac00", "#c46094", "#674ea7", "#12315f"]
+  },
+  {
+    "name": "Madder",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Orange", "Red", "Pink", "Purple", "Brown"],
+    "image": "./assets/madder.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/madder_40cm.glb",
+    "specificColors": ["#d75300", "#b70002", "#eaa98d", "#851c3d", "#813d28"]
+  },
+  {
+    "name": "Marigold",
+    "sunlight": ["Full Sun"],
+    "colors": ["Yellow", "Orange"],
+    "image": "./assets/marigold.png",
+    "plantsPerBlock": 12,
+    "modelPath": "/models/marigold_60cm.glb",
+    "specificColors": ["#d3ab07", "#63683f"]
+  },
+  {
+    "name": "Safflower",
+    "sunlight": ["Full Sun"],
+    "colors": ["Orange", "Pink"],
+    "image": "./assets/safflower.png",
+    "plantsPerBlock": 20,
+    "modelPath": "/models/safflower_yellow_50cm.glb",
+    "specificColors": ["#d3ab07", "#f54706", "#ef2693"]
+  },
+  {
+    "name": "Sawwort",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Yellow", "Purple"],
+    "image": "./assets/saw-wort.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/sawwort_purple_50cm.glb",
+    "specificColors": ["#d3ab07"]
+  },
+  {
+    "name": "St John's Wort",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Yellow", "Green", "Grey", "Black"],
+    "image": "./assets/st-johns-wort.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/stjohnswort_90cm.glb",
+    "specificColors": ["#adc742", "#4c4f3a"]
+  },
+  {
+    "name": "Tansy",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Yellow"],
+    "image": "./assets/tansy.png",
+    "plantsPerBlock": 4,
+    "modelPath": "/models/Tansy_40.glb",
+    "specificColors": ["#ffd966", "#565c5a"]
+  },
+  {
+    "name": "Weld",
+    "sunlight": ["Full Sun"],
+    "colors": ["Yellow"],
+    "image": "./assets/weld.png",
+    "plantsPerBlock": 16,
+    "modelPath": "/models/weld_120cm.glb",
+    "specificColors": ["#ffff00", "#717931", "#000000"]
+  },
+  {
+    "name": "Woad",
+    "sunlight": ["Full Sun"],
+    "colors": ["Pink", "Purple", "Blue", "Green", "Grey", "Black"],
+    "image": "./assets/woad.png",
+    "plantsPerBlock": 16,
+    "modelPath": "/models/woad_30cm.glb",
+    "specificColors": ["#c46094", "#12315f"]
+  },
+  {
+    "name": "Yarrow",
+    "sunlight": ["Full Sun", "Partial Sun"],
+    "colors": ["Yellow"],
+    "image": "./assets/yarrow.png",
+    "plantsPerBlock": 6,
+    "modelPath": "/models/yarrow_50cm.glb",
+    "specificColors": ["#ffd966", "#565c5a"]
+  }
+]
