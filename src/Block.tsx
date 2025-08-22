@@ -54,6 +54,18 @@ const Block: React.FC<BlockProps> = ({
 
   const instances = modelPath ? makeCenteredPositions(plantsPerBlock) : [];
 
+  const MODEL_OFFSETS: Record<string, [number, number, number]> = {
+    "Cosmos (pink)": [-0.35, 0, 0],
+    "Cosmos (orange)": [-0.25, 0, 0],
+    "Cosmos (red)": [-0.35, 0, 0],
+    "Dyer's Chamomile": [0, 0, -0.15],
+    "Marigold": [0.2, 0, 0],
+    "Safflower": [0, 0, 0.3],
+    "Sawwort": [0, 0, 0.35],
+    "St John's Wort": [-0.65, 0, 0.05],
+    "Yarrow": [0, 0, 0.3],
+  };
+
   return (
     <group position={position}>
       {/* Gras (bovenlaag) */}
@@ -86,9 +98,20 @@ const Block: React.FC<BlockProps> = ({
 
       {/* Plantmodellen */}
       {modelPath &&
-        instances.map((pos, idx) => (
-          <PlantModel key={idx} modelPath={modelPath} position={pos} />
-        ))}
+        instances.map((pos, idx) => {
+          const offset = MODEL_OFFSETS[selectedPlant || ""] || [0, 0, 0];
+          return (
+            <PlantModel
+              key={idx}
+              modelPath={modelPath}
+              position={[
+                pos[0] + offset[0],
+                pos[1] + offset[1],
+                pos[2] + offset[2],
+              ]}
+            />
+          );
+        })}
 
       {/* Grond (onderlaag) */}
       <mesh position={[0, 0.2, 0]}>
