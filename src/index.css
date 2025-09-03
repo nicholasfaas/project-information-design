@@ -1,44 +1,259 @@
 :root {
-  font-family: 'Montserrat', sans-serif;
-  line-height: 1.5;
- 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
- 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font: 'Montserrat', sans-serif;
+  --text: #000;
+  --muted: #666;
+  --bg: #fff;
+  --line: #E8E8E8;
+  --sheet-bg: #fff;
+  --sheet-shadow: 0 -12px 30px rgba(0,0,0,.15);
+  --handle: #ddd;
+  --accent: #f73900;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
   margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Scrollbar (optioneel) */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #eee; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #666; }
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  /* startpositie (half open / 30% is via inline style of JS settable) */
+  height: 30vh;
+  max-height: 90vh;
+
+  background: var(--sheet-bg);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: var(--sheet-shadow);
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+
+  /* maak het boven canvas klikbaar/zichtbaar */
+  z-index: 30;
+  touch-action: none; /* helpt bij drag on mobile */
 }
- 
-/* Algemene stijl voor de scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+
+/* zone die je vastpakt om te slepen */
+.sheet__dragzone {
+  padding: 10px 0 8px;
+  cursor: grab;
+  touch-action: none;
 }
- 
-/* Achtergrond van de scrollbar */
-::-webkit-scrollbar-track {
+
+.sheet__dragzone:active {
+  cursor: grabbing;
+}
+
+.sheet__handle {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--handle);
+  margin: 0 auto 6px;
+}
+
+/* Tabs bovenin de sheet */
+.sheet__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+.sheet__tab {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: #fafafa;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sheet__tab--active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Scrollbare content in de sheet */
+.sheet__content {
+  min-height: 0;
+  overflow: auto;
+  padding: 0 1em 2em;
+}
+
+/* Hulpkopjes en paragraphs in sheet */
+.sheet h3 {
+  font-size: 20px;
+}
+
+.sheet p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Grid voor plant-catalogus in sheet */
+.plants-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.plant-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5em;
+  cursor: pointer;
+}
+
+.plant-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid transparent;
+}
+
+.plant-card--selected img {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.plant-card span {
+  font-size: 0.95em;
+  text-align: center;
+}
+
+/* Filters lijstjes in twee kolommen (voor kleur bijv.) */
+.filter-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Custom checkbox look (optioneel; als je systeem checkbox met accentColor gebruikt, kun je dit negeren) */
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 2px solid #000;
+  display: inline-block;
+  position: relative;
+}
+
+.checkbox--checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Results kaartjes */
+.result-card {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  padding: 1em;
   background: #eee;
-  border-radius: 10px;
+  border-radius: 8px;
+  margin: 12px 0;
 }
- 
-/* Scrollbar zelf */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
+
+.result-col {
+  text-align: left;
 }
- 
-/* Scrollbar tijdens hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #666;
+
+.result-col p {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: var(--muted);
 }
+
+.result-col h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Kleuren bolletjes bij Dye color */
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,.15);
+  display: inline-block;
+}
+
+/* Share footer binnen sheet of sidebar */
+.share-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5em;
+  text-align: center;
+}
+
+.share-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25em;
+  cursor: pointer;
+}
+
+/* ===== Desktop tweaks ===== */
+@media (min-width: 900px) {
+  /* Verberg bottom sheet op desktop als je desktop UI actief is */
+  .sheet {
+    display: none;
+  }
+}
+
+/* ===== Mobile canvas helpers ===== */
+.canvas-wrap {
+  position: relative; /* zodat overlay-logo's position: absolute kunnen gebruiken */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Center-top en center-bottom logo's over canvas */
+.canvas-logo-top,
+.canvas-logo-bottom {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.canvas-logo-top { top: 1em; height: 4em; }
+.canvas-logo-bottom { bottom: 1em; height: 6em; }

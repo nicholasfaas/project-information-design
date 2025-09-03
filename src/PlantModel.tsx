@@ -7,10 +7,26 @@ interface PlantModelProps {
   scale?: [number, number, number];
 }
 
-const PlantModel: React.FC<PlantModelProps> = ({ modelPath, position, scale = [0.5, 0.5, 0.5] }) => {
-  const { scene } = useGLTF(modelPath);
+const PlantModel: React.FC<PlantModelProps> = ({
+  modelPath,
+  position,
+  scale = [0.5, 0.5, 0.5],
+}) => {
+  // Laad GLTF model
+  const { scene } = useGLTF(modelPath, true);
 
-  return <primitive object={scene.clone()} position={position} scale={scale} />;
+  if (!scene) {
+    console.error(`⚠️ Failed to load model: ${modelPath}`);
+    return null;
+  }
+
+  return (
+    <primitive
+      object={scene.clone()}
+      position={position}
+      scale={scale}
+    />
+  );
 };
 
 export default PlantModel;

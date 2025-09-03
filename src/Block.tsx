@@ -7,9 +7,11 @@ interface BlockProps {
   selectedPlant: string | null;
   onBlockClick: (position: [number, number, number]) => void;
   plantsData: Array<{ name: string; modelPath: string; plantsPerBlock: number }>;
-  onHoverIn?: (plantName: string, e: any) => void;
-  onHoverMove?: (e: any) => void;
+  // Hover/tooltip (optioneel)
+  onHoverIn?: (plantName: string, e: PointerEvent) => void;
+  onHoverMove?: (e: PointerEvent) => void;
   onHoverOut?: () => void;
+  enableHover?: boolean; // alleen desktop
 }
 
 const Block: React.FC<BlockProps> = ({
@@ -20,6 +22,7 @@ const Block: React.FC<BlockProps> = ({
   onHoverIn,
   onHoverMove,
   onHoverOut,
+  enableHover = true,
 }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -29,6 +32,19 @@ const Block: React.FC<BlockProps> = ({
 
   const modelPath = plantInfo?.modelPath;
   const plantsPerBlock = plantInfo?.plantsPerBlock ?? 0;
+
+  // Handmatige offsets voor specifieke modellen
+  const MODEL_OFFSETS: Record<string, [number, number, number]> = {
+    "Cosmos (pink)": [-0.35, 0, 0],
+    "Cosmos (orange)": [-0.25, 0, 0],
+    "Cosmos (red)": [-0.35, 0, 0],
+    "Dyer's Chamomile": [0, 0, -0.15],
+    "Marigold": [0.2, 0, 0],
+    "Safflower": [0, 0, 0.3],
+    "Sawwort": [0, 0, 0.35],
+    "St John's Wort": [-0.65, 0, 0.05],
+    "Yarrow": [0, 0, 0.3],
+  };
 
   const makeCenteredPositions = (n: number): Array<[number, number, number]> => {
     if (n <= 0) return [];
@@ -54,16 +70,23 @@ const Block: React.FC<BlockProps> = ({
 
   const instances = modelPath ? makeCenteredPositions(plantsPerBlock) : [];
 
-  const MODEL_OFFSETS: Record<string, [number, number, number]> = {
-    "Cosmos (pink)": [-0.35, 0, 0],
-    "Cosmos (orange)": [-0.25, 0, 0],
-    "Cosmos (red)": [-0.35, 0, 0],
-    "Dyer's Chamomile": [0, 0, -0.15],
-    "Marigold": [0.2, 0, 0],
-    "Safflower": [0, 0, 0.3],
-    "Sawwort": [0, 0, 0.35],
-    "St John's Wort": [-0.65, 0, 0.05],
-    "Yarrow": [0, 0, 0.3],
+  // hover handlers (alleen desktop)
+  const handleOver = (e: any) => {
+    if (!enableHover) return;
+    e.stopPropagation();
+    setHovered(true);
+    if (selectedPlant && onHoverIn) onHoverIn(selectedPlant, e);
+  };
+  const handleMove = (e: any) => {
+    if (!enableHover) return;
+    e.stopPropagation();
+    if (onHoverMove) onHoverMove(e);
+  };
+  const handleOut = (e: any) => {
+    if (!enableHover) return;
+    e.stopPropagation();
+    setHovered(false);
+    if (onHoverOut) onHoverOut();
   };
 
   return (
@@ -72,25 +95,12 @@ const Block: React.FC<BlockProps> = ({
       <mesh
         position={[0, 0.45, 0]}
         onClick={() => onBlockClick(position)}
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          setHovered(true); // highlighten
-          if (selectedPlant && onHoverIn) {
-            onHoverIn(selectedPlant, e);
-          }
-        }}
-        onPointerMove={(e) => {
-          e.stopPropagation();
-          if (onHoverMove) onHoverMove(e);
-        }}
-        onPointerOut={(e) => {
-          e.stopPropagation();
-          setHovered(false); // reset highlight
-          if (onHoverOut) onHoverOut();
-        }}
+        onPointerOver={handleOver}
+        onPointerMove={handleMove}
+        onPointerOut={handleOut}
       >
         <boxGeometry args={[1, 0.1, 1]} />
-        <meshStandardMaterial color={hovered ? "#8FB93E" : "#A1CC47"} />
+        <meshStandardMaterial color={enableHover && hovered ? "#8FB93E" : "#A1CC47"} />
         <Edges>
           <lineBasicMaterial linewidth={1} />
         </Edges>
