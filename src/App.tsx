@@ -776,8 +776,7 @@ const App: React.FC = () => {
                 Design your dye garden
               </h2>
               <p style={{ fontSize: 14, color: "#666", margin: 0 }}>
-                Set up your garden and preferences. Use filters to find suitable plants, select them and click on a grid
-                cell in the garden to place them.
+                Set up your garden. Use filters to find suitable plants, select them and click on a grid cell to place them.
               </p>
             </div>
           </div>
@@ -942,10 +941,9 @@ const App: React.FC = () => {
           activeTab={activeTab}
           onTabChange={setActiveTab}
 
-          // drag-hoogtes (vh-fracties)
-          minHeight={0.30}
-          maxHeight={0.90}
-          initialHeight={0.30}
+          // minHeight={0}
+          // maxHeight={0.9}
+          // initialHeight={0.3}
 
           // plants + selectie
           plants={plants}

@@ -67,7 +67,7 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(ma
 const BottomSheet: React.FC<BottomSheetProps> = ({
   activeTab,
   onTabChange,
-  minHeight = 0.3,
+  minHeight = 0.05,
   maxHeight = 0.9,          // 90% open
   initialHeight = 0.3,      // 30% half-open
 
@@ -105,8 +105,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const startY = useRef(0);
   const startHeight = useRef(initialHeight);
-  const [height, setHeight] = useState<number>(initialHeight);
+  const [height, setHeight] = useState<number>(minHeight);
   const [dragging, setDragging] = useState(false);
+  const didDrag = useRef(false);  // nieuw
+  const EPS = 0.005;              // nieuw
 
   useEffect(() => {
     if (!sheetRef.current) return;
@@ -116,22 +118,40 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
   // drag
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     setDragging(true);
+    didDrag.current = false; // reset bij begin drag/tap
     (e.target as HTMLDivElement).setPointerCapture(e.pointerId);
     startY.current = e.clientY;
     startHeight.current = height;
   };
+
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging) return;
     const deltaY = e.clientY - startY.current;
+    if (Math.abs(deltaY) > 4) didDrag.current = true; // markeer als echte drag
     const deltaVH = deltaY / window.innerHeight;
     const next = clamp(startHeight.current - deltaVH, minHeight, maxHeight);
     setHeight(next);
   };
+
   const onPointerUp = () => {
     if (!dragging) return;
     setDragging(false);
-    const mid = (minHeight + maxHeight) / 2;
-    setHeight((h) => (h < mid ? minHeight : maxHeight));
+
+    // Snap naar dichtstbijzijnde punt: min, half (initialHeight) of max
+    setHeight((h) => {
+      const points = [minHeight, initialHeight, maxHeight];
+      let nearest = points[0];
+      let best = Math.abs(h - points[0]);
+
+      for (let i = 1; i < points.length; i++) {
+        const d = Math.abs(h - points[i]);
+        if (d < best) {
+          best = d;
+          nearest = points[i];
+        }
+      }
+      return nearest;
+    });
   };
 
   const renderFiltersTab = () => (
@@ -490,24 +510,28 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
         <div className="sheet__handle" />
       </div>
 
-      {/* Tabs */}
-      <div className="sheet__tabs">
-        <button
-          style={tabBtnStyle(activeTab === "filters")}
-          onClick={() => onTabChange("filters")}
-        >
-          Filters
-        </button>
-        <button
-          style={tabBtnStyle(activeTab === "results")}
-          onClick={() => onTabChange("results")}
-        >
-          Results
-        </button>
-      </div>
+      {height > minHeight + EPS && (
+        <>
+          {/* Tabs */}
+          <div className="sheet__tabs">
+            <button
+              style={tabBtnStyle(activeTab === "filters")}
+              onClick={() => onTabChange("filters")}
+            >
+              Filters
+            </button>
+            <button
+              style={tabBtnStyle(activeTab === "results")}
+              onClick={() => onTabChange("results")}
+            >
+              Results
+            </button>
+          </div>
 
-      {/* Content */}
-      {activeTab === "filters" ? renderFiltersTab() : renderResultsTab()}
+          {/* Content */}
+          {activeTab === "filters" ? renderFiltersTab() : renderResultsTab()}
+        </>
+      )}
     </div>
   );
 };
